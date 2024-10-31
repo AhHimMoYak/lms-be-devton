@@ -20,18 +20,18 @@ public class CurriculumServiceImpl implements CurriculumService {
 
     @Override
     @Transactional
-    public boolean add(UserDetails userDetails, long courseId, String curriculumTitle) {
+    public Long add(UserDetails userDetails, long courseId, String curriculumTitle) {
         Course course = courseRepository.findById(courseId).orElse(null);
-        if (course == null || !course.getTutor().equals(userService.getAuth(userDetails))) {
-            return false;
-        }
+//        if (course == null || !course.getTutor().equals(userService.getAuth(userDetails))) {
+//            return ;
+//        }
         long count = curriculumRepository.countByCourse(course);
-        curriculumRepository.save(Curriculum.builder()
+        return curriculumRepository.save(Curriculum.builder()
                 .title(curriculumTitle)
                 .idx((int)(count+1))
                 .course(course)
-                .build());
-        return true;
+                .build()).getId();
+
     }
 
     @Override

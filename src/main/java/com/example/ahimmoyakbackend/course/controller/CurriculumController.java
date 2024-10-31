@@ -16,12 +16,12 @@ public class CurriculumController {
     private final CurriculumService curriculumService;
 
     @PostMapping("/curriculum")
-    public ResponseEntity<String> addCurriculum(
+    public ResponseEntity<Long> addCurriculum(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable("courseId") long courseId,
             @RequestBody CurriculumCreateRequestDto requestDto
             ) {
-        return curriculumService.add(userDetails, courseId, requestDto.title()) ? ResponseEntity.ok("커리큘럼 등록 성공") : ResponseEntity.badRequest().body("커리큘럼 등록 실패");
+        return ResponseEntity.ok(curriculumService.add(userDetails, courseId, requestDto.title()));
     }
 
     @PatchMapping("/curriculum/{curriculumId}")

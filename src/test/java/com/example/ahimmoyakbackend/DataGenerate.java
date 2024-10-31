@@ -1133,7 +1133,7 @@ public class DataGenerate {
                 }
             }
         }
-        List<Course> user1Course = courseRepository.findByEnrollments_User(user1);
+        List<Course> user1Course = courseRepository.findAllByEnrollments_User(user1);
         LiveState[] liveStates = LiveState.values();
 
         User[] instructors = {user7, user8, user9};

@@ -52,7 +52,7 @@ public class UserService {
             throw new IllegalArgumentException("잘못된 요청입니다.");
         }
 
-        JwsDTO jwsDto = jwtTokenProvider.createAllToken(findUser.getUsername(), findUser.getEmail());
+        JwsDTO jwsDto = jwtTokenProvider.createAllToken(findUser.getUsername(), findUser.getEmail(), findUser.isTutorState());
 
         response.addHeader(JwtTokenProvider.ACCESS_TOKEN, jwsDto.getAccessToken());
         response.addHeader(JwtTokenProvider.REFRESH_TOKEN, jwsDto.getRefreshToken());

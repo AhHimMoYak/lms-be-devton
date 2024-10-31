@@ -1,6 +1,7 @@
 package com.example.ahimmoyakbackend.course.service;
 
 import com.example.ahimmoyakbackend.auth.entity.User;
+import com.example.ahimmoyakbackend.course.common.CourseCategory;
 import com.example.ahimmoyakbackend.course.dto.CourseDetailResponseDto;
 import com.example.ahimmoyakbackend.course.dto.CourseListResponseDto;
 import com.example.ahimmoyakbackend.course.dto.CourseCreateRequestDto;
@@ -18,5 +19,6 @@ public interface CourseService {
     public List<CourseListResponseDto> getList(UserDetails userDetails);
     public List<CourseListResponseDto> getAllList();
     public Page<CourseListResponseDto> getAllList(Pageable pageable);
-
+    public List<CourseListResponseDto> getAllList(CourseCategory category);
+    public Page<CourseListResponseDto> getAllList(Pageable pageable, CourseCategory category);
 }

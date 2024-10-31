@@ -2,6 +2,8 @@ package com.example.ahimmoyakbackend.course.service;
 
 import com.example.ahimmoyakbackend.course.common.ContentType;
 import com.example.ahimmoyakbackend.course.dto.FileInfoDto;
+import com.example.ahimmoyakbackend.course.entity.ContentsMaterial;
+import com.example.ahimmoyakbackend.course.repository.ContentsMaterialRepository;
 import com.example.ahimmoyakbackend.global.exception.ApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +22,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -30,6 +34,8 @@ import java.util.concurrent.TimeUnit;
 @Service
 @RequiredArgsConstructor
 public class FileService {
+
+    private final ContentsMaterialRepository contentsMaterialRepository;
 
     private static final long MAX_FILE_SIZE = 1024L * 1024L * 1024L * 10L; // 10GB
 
@@ -104,9 +110,12 @@ public class FileService {
 
     public ResponseEntity<Resource> downloadMaterial(String fileInfo) {
         Path path = Paths.get("storage", "material", fileInfo);
+        ContentsMaterial material = contentsMaterialRepository.findBySavedName(subPostfix(fileInfo));
+        String encodedFilename = URLEncoder.encode(material.getOriginName()+material.getPostfix(), StandardCharsets.UTF_8);
         try{
             HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.setContentDisposition(ContentDisposition.builder("attachment").filename(path.toFile().getName()).build());
+            httpHeaders.setContentDisposition(ContentDisposition.builder("inline").filename(encodedFilename).build());
+            httpHeaders.setContentType(MediaType.APPLICATION_PDF);
             Resource resource = new InputStreamResource(Files.newInputStream(path)); // save file resource
             return new ResponseEntity<>(resource, httpHeaders, HttpStatus.OK);
         } catch (IOException e) {

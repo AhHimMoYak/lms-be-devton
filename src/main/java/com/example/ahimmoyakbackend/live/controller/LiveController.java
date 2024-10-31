@@ -22,32 +22,28 @@ public class LiveController {
 
     @PostMapping
     public ResponseEntity<Void> createLive(@AuthenticationPrincipal UserDetails userDetails, @RequestParam Long courseProvideId, @RequestBody LiveCreateRequestDTO requestDTO) {
-        boolean result = liveService.createLive(requestDTO, courseProvideId, userDetails.getUsername());
+        boolean result = liveService.createLive(requestDTO, courseProvideId, userDetails);
         return result ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/{liveId}")
     public ResponseEntity<LiveCourseResponseDTO> getLive(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long liveId) {
-        LiveCourseResponseDTO liveCourseResponseDTO = liveService.getLive(liveId);
-        return (liveCourseResponseDTO != null) ? ResponseEntity.ok(liveCourseResponseDTO) : ResponseEntity.notFound().build();
+        return ResponseEntity.ok(liveService.getLive(liveId));
     }
 
     @GetMapping
     public ResponseEntity<List<LiveCourseResponseDTO>> getCourseLives(@AuthenticationPrincipal UserDetails userDetails, @RequestParam Long courseProvideId) {
-        List<LiveCourseResponseDTO> liveList = liveService.getLiveListByCourse(courseProvideId);
-        return ResponseEntity.ok().body(liveList);
+        return ResponseEntity.ok().body(liveService.getLiveListByCourse(courseProvideId));
     }
 
     @GetMapping("/instructor")
-    public ResponseEntity<List<LiveTutorResponseDTO>> getTutorLives(@AuthenticationPrincipal UserDetails userDetails, @RequestParam Long instructorId) {
-        List<LiveTutorResponseDTO> liveList = liveService.getLiveListByTutor(instructorId);
-        return ResponseEntity.ok().body(liveList);
+    public ResponseEntity<List<LiveTutorResponseDTO>> getTutorLives(@AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok().body(liveService.getLiveListByTutor(userDetails));
     }
 
     @PostMapping("/publish")
     public ResponseEntity<Void> publishLive(@ModelAttribute LivePublishFormDTO form) {
-        boolean valid = liveService.publishLive(form.getName());
-        return valid ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
+        return liveService.publishLive(form.getName()) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/publish-done")

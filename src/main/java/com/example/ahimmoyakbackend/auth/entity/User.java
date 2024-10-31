@@ -70,5 +70,4 @@ public class User extends Timestamped {
         this.tutorState = tutorState;
         return this;
     }
-
 }

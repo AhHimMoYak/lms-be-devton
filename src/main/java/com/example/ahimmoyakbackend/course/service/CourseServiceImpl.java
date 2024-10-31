@@ -79,27 +79,27 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<CourseListResponseDto> getAllList() {
-        return courseRepository.findAll().stream()
+        return courseRepository.findAllOrderByState().stream()
                 .map(CourseListResponseDto::from)
                 .toList();
     }
 
     @Override
     public Page<CourseListResponseDto> getAllList(Pageable pageable) {
-        return courseRepository.findAll(pageable)
+        return courseRepository.findAllOrderByState(pageable)
                 .map(CourseListResponseDto::from);
     }
 
     @Override
     public List<CourseListResponseDto> getAllList(CourseCategory category) {
-        return courseRepository.findAllByCategory(category).stream()
+        return courseRepository.findAllByCategoryOrderByState(category).stream()
                 .map(CourseListResponseDto::from)
                 .toList();
     }
 
     @Override
     public Page<CourseListResponseDto> getAllList(Pageable pageable, CourseCategory category) {
-        return courseRepository.findAllByCategory(category, pageable)
+        return courseRepository.findAllByCategoryOrderByState(category, pageable)
                 .map(CourseListResponseDto::from);
     }
 }

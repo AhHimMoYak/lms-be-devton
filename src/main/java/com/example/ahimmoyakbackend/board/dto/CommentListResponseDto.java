@@ -6,12 +6,14 @@ import lombok.Builder;
 @Builder
 public record CommentListResponseDto(
     String content,
-    String user
+    String user,
+    Long id
 ) {
     public static CommentListResponseDto from(CourseComment comment) {
         return CommentListResponseDto.builder()
                 .content(comment.getContent())
                 .user(comment.getUser().getUsername())
+                .id(comment.getId())
                 .build();
     }
 }

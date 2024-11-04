@@ -62,8 +62,8 @@ public class CourseController {
     }
 
     @GetMapping(value = "/all", params = "page")
-    public ResponseEntity<Page<CourseListResponseDto>> getAllCoursesList(Pageable page) {
-        return ResponseEntity.ok(courseService.getAllList(page));
+    public ResponseEntity<Page<CourseListResponseDto>> getAllCoursesList(Pageable pageable) {
+        return ResponseEntity.ok(courseService.getAllList(pageable));
     }
 
     @GetMapping(value = "/all", params = "category")
@@ -72,8 +72,8 @@ public class CourseController {
     }
 
     @GetMapping(value = "/all", params = {"page", "category"})
-    public ResponseEntity<Page<CourseListResponseDto>> getAllCoursesList(Pageable page, CourseCategory category) {
-        return ResponseEntity.ok(courseService.getAllList(page, category));
+    public ResponseEntity<Page<CourseListResponseDto>> getAllCoursesList(Pageable pageable, CourseCategory category) {
+        return ResponseEntity.ok(courseService.getAllList(pageable, category));
     }
 
 }

@@ -10,7 +10,9 @@ import com.example.ahimmoyakbackend.live.common.LiveState;
 import com.example.ahimmoyakbackend.live.dto.LiveCourseResponseDTO;
 import com.example.ahimmoyakbackend.live.dto.LiveCreateRequestDTO;
 import com.example.ahimmoyakbackend.live.dto.LiveTutorResponseDTO;
+import com.example.ahimmoyakbackend.live.entity.LiveStatus;
 import com.example.ahimmoyakbackend.live.entity.LiveStreaming;
+import com.example.ahimmoyakbackend.live.repository.LiveStatusRepository;
 import com.example.ahimmoyakbackend.live.repository.LiveStreamingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +32,8 @@ public class LiveService {
     private final CourseRepository courseRepository;
     private final UserService userService;
     private final UserRepository userRepository;
+    private final LiveStatusRepository liveStatusRepository;
+    private final ChatService chatService;
 
     @Transactional
     public boolean createLive(LiveCreateRequestDTO requestDTO, Long courseId, UserDetails userDetails) {
@@ -78,6 +82,7 @@ public class LiveService {
         if(liveStreaming != null && tutor != null){
             if(liveStreaming.getCourse().getTutor().equals(tutor)){
                 liveStreaming.setState(LiveState.ON);
+                liveStatusRepository.save(new LiveStatus(liveId, LiveState.ON));
                 log.info("Publish live streaming success. stream_key: {}, tutor_id: {}", liveId, tutorId);
                 return true;
             }
@@ -91,6 +96,8 @@ public class LiveService {
         String[] keyAndTutor = streamKey.split("_");
         Long liveId = Long.parseLong(keyAndTutor[0]);
         liveStreamingRepository.findById(liveId).ifPresent(liveStreaming -> liveStreaming.setState(LiveState.END));
+        liveStatusRepository.deleteById(liveId);
+        chatService.deleteAll(liveId);
         log.info("Close live streaming. stream_key: {}, tutor_id: {}", liveId, keyAndTutor[1]);
     }
 }

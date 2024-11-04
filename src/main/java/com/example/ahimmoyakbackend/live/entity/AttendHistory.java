@@ -1,6 +1,6 @@
-package com.example.ahimmoyakbackend.course.entity;
+package com.example.ahimmoyakbackend.live.entity;
 
-import com.example.ahimmoyakbackend.live.entity.LiveStreaming;
+import com.example.ahimmoyakbackend.course.entity.Enrollment;
 import com.example.ahimmoyakbackend.global.entity.Timestamped;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

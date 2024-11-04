@@ -2,10 +2,10 @@ package com.example.ahimmoyakbackend.live.entity;
 
 import com.example.ahimmoyakbackend.global.entity.Timestamped;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -30,5 +30,9 @@ public class LiveQuiz extends Timestamped {
     @ManyToOne
     @JoinColumn(name = "live_id")
     private LiveStreaming liveStreaming;
+
+    @Setter
+    @OneToMany(mappedBy = "liveQuiz", orphanRemoval = true)
+    private List<LiveQuizOption> liveQuizOptions = new ArrayList<>();
 
 }
